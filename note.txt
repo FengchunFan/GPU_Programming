@@ -1,1 +1,21 @@
 compile line: nvcc <filename>
+
+compile line if involves pthread: nvcc <filename> -Xcompiler -pthread
+
+CPU is designed to minimize latency, where GPU is designed to maximize throughput (computational power).
+
+CUDA performs parallel computation on GPU while pthread performs on CPU.
+
+CUDA threads execute in SIMT (single instruction mulitple threads, which is similar to SIMD) fashion.
+SIMT will have multiple threads perform the same instruction on different data sets.
+
+CUDA Program breakdown:
+    *Kernels: functions that run on the GPU.
+    *Threads: Kernel is executed as set of threads, each thread map to a single CUDA core on GPU.
+    *Two main pieces of hardware in CUDA programming model:
+        *CPU: together with computer's RAM, is refered as HOST. Good at running serial program.
+        *GPU: together with its dedicated DRAM is refered as DEVICE. Good at running parallel program. 
+        Pair together, it is called heterogeneous parallel programming -> CUDA (designed specifically for NVIDIA GPUs).
+    *CUDA program usually runs traditionally on CPU, when encounter parallel portion, it will pass to the GPU for execution.
+     But the communicating between CPU and GPU is very expensive, so we only want to pass the massively parallel ones.
+    *Threads may have different rates, as the same kernel function may receive different data set.

@@ -9,6 +9,8 @@ CUDA performs parallel computation on GPU while pthread performs on CPU.
 CUDA threads execute in SIMT (single instruction mulitple threads, which is similar to SIMD) fashion.
 SIMT will have multiple threads perform the same instruction on different data sets.
 
+Use __global__ specifier for functions that are intended to run on the kernel.
+
 CUDA Program breakdown:
     *Kernels: functions that run on the GPU.
     *Threads: Kernel is executed as set of threads, each thread map to a single CUDA core on GPU.
@@ -19,3 +21,27 @@ CUDA Program breakdown:
     *CUDA program usually runs traditionally on CPU, when encounter parallel portion, it will pass to the GPU for execution.
      But the communicating between CPU and GPU is very expensive, so we only want to pass the massively parallel ones.
     *Threads may have different rates, as the same kernel function may receive different data set.
+
+Common workflow of CUDA program:
+    1. Allocate host memory and initialize host data 
+            *usually done through malloc() and free()
+             ex. float* a; //array a with size N
+                a = (float*)malloc(sizeof(float) * N);
+                free(a);
+    2. Allocate device memory
+            *cudaMalloc(void **devPtr, size_t count); 
+                allocate memory of size count in device memory and update device pointer devPtr to the allocated memory
+                ex. cudaMalloc((void**)&d_a, sizeof(float) * N);
+            *cudaFree(void *devPtr);
+                deallocate a region of the device memory where the device pointer devPtr points to.
+                ex. cudaFree(d_a);
+    3. Transfer input data from host to device memory
+            *cudaMemcpy(void *dst, void *src, size_t count, cudaMemcpyKind kind)
+                The function copy a memory of size count from src to dst. kind indicates the direction
+                ex. cudaMemcpy(d_a, a, sizeof(float) * N, cudaMemcpyHostToDevice);
+    4. Execute Kernels
+            *use function specifier __global__ to indicate function that execute on kernel
+    5. Transfer output from device memory to host
+            *cudaMemcpy(void *dst, void *src, size_t count, cudaMemcpyKind kind)
+                The function copy a memory of size count from src to dst. kind indicates the direction
+                ex. cudaMemcpy(a, d_a, sizeof(float) * N, cudaMemcpyDeviceToHost);

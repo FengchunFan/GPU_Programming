@@ -1,6 +1,5 @@
 //modified based on sample code taken from: https://cuda-tutorial.readthedocs.io/en/latest/tutorials/tutorial01/
 //program computes the addition of two vectors stored in array a and b, and put the result in out.
-//time: real 0m0.058s
 
 #include <stdio.h>
 #include <cstdlib>

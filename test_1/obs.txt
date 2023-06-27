@@ -1,0 +1,27 @@
+In this sample, we will be using five sample test files: vector_add.c, vector_add_p.c, vector_add.cu, vector_add_t.cu, vector_add_b.cu
+
+vector_add.c: written in c, running program serially on CPU.
+
+vector_add_p.c: written in c, use chatgpt to rewrite vector_add.c using pthread.
+
+vector_add.cu: written in c with CUDA, running program parallelly on GPU but only 1 thread, similar to running program in serial.
+
+vector_add_t.cu: written in c with CUDA, running program parallelly on GPU with 1 thread block and 256 threads.
+
+vector_add_b.cu: written in c with CUDA, running program parallelly on GPU with multiple thread block and multiple threads.
+
+
+
+OBSERVATION:
+
+First time executing the CUDA program usually will meet excessive latency, the runtime become more identical after the first run.
+
+Actual system result can be seen in 1.png and 2.png.
+
+We can observe that vector_add_b.cu is running faster than vector_add_t.cu, and vector_add_t.cu is running faster than vector_add.cu,
+this is totally expected because we are improving our code, we are ultilizing more thread blocks and threads to help program better running
+parallelly on the GPU.
+But all three programs runs slower than the vector_add.c program, which runs serially on the CPU. Expecting, running parallel program
+should be faster on GPU which is designed to run parallel program. 
+Lastly, running vector_add_p.c is faster than vector_add.c, because it is written using pthread, and it will be running program parallelly
+on the CPU, thus it is definitely faster than running serially on CPU.
